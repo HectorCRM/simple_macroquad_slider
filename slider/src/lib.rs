@@ -1,9 +1,12 @@
-use macroquad::{color::{BLACK, BLUE, WHITE}, shapes::draw_rectangle, window::{clear_background, next_frame, screen_width}};
 use macroquad::prelude::*;
+/*
+Autor: Héctor Monroy Fuertes
+Version: 1.0
+Descripción: Pequeño proyecto para generar sliders que permitan la modificacion de variables de forma sencilla
+*/
 
-
-
-struct Slider {
+/// Struct para crear un slider interactivo que permita controlar variables en macroquad
+pub struct Slider {
     pos_x_barra: f32,
     pos_y_barra: f32,
     ancho_barra: f32,
@@ -17,7 +20,7 @@ struct Slider {
 }
 
 impl Slider {
-
+    /// Metodo constructor del slider
     pub fn nuevo_slider(nombre: &str, pos_y: f32, ancho: f32, alto: f32, valor: f32, color_barra: Color, color_slider: Color) -> Self {
         let x: f32 = (screen_width() / 2.0) - (ancho / 2.0);
         
@@ -34,13 +37,14 @@ impl Slider {
             nombre: nombre.to_string(),
         }
     }
-
+    /// Método para poder obtener las coordenadas del mouse de forma sencilla
     pub fn posicion_mouse() -> (f32, f32) {
         let (raton_x, raton_y) = mouse_position();
         
         (raton_x, raton_y)
     }
 
+    /// Metodo para ajustar la posicion del slider en el eje X dependiendo del valor de la variable
     pub fn posicionar_slider(&self, valor: f32) -> f32 {
         let ancho_util_barra: f32 = self.ancho_barra - self.ancho_slider;
         let x_slider = self.pos_x_barra + (valor * ancho_util_barra);
@@ -48,6 +52,7 @@ impl Slider {
         x_slider
     }
 
+    /// Metodo para poder desplazar el slider por la barra y poder modificar el valor de la variable recibida como parametro
     pub fn mover_slider(&mut self, valor: f32) -> f32 {
     let (x_mouse, y_mouse) = Slider::posicion_mouse();
     
@@ -83,7 +88,7 @@ impl Slider {
     }
 
 
-
+    /// Metodo para pintar el slider completo en pantalla(barra, slider y etiqueta)
     pub fn pintar_slider(&self, valor: f32) {
         let x_slider = self.posicionar_slider(valor);
 
@@ -98,34 +103,4 @@ impl Slider {
         draw_rectangle(x_slider, self.pos_y_barra, self.ancho_slider, self.alto, self.color_slider);
     }
 
-}
-
-#[macroquad::main("Slider")]
-async fn main() {
-    println!("Hello, world!");
-    let mut valor1: f32 = 0.5;
-    let mut slider1 = Slider::nuevo_slider("Volumen",50.0, 400.0, 20.0, valor1, WHITE, BLACK);
-    slider1.pos_x_slider = slider1.posicionar_slider(valor1);
-    //let slider2 = Slider::nuevo_slider(100.0, 400.0, 20.0, valor1, WHITE, BLACK);
-
-    loop {
-        clear_background(BLUE);
-        //let mut direccion_arrastre: DireccionRaton = DireccionRaton::None;
-        //let valor: f32 = 1.0;
-
-       
-        slider1.pintar_slider(valor1);       
-        valor1 = slider1.mover_slider(valor1);
-        println!("Volumen: {}%", valor1 * 100.0);
-        //slider1.posicionar_slider(valor1);
-        
-        //slider2.pintar_slider(valor1);
-/* 
-        if is_mouse_button_down(MouseButton::Left) {
-            let (raton_x, raton_y) = mouse_position();
-        }
-            */
-
-        next_frame().await;
-    }
 }
