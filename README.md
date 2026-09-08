@@ -1,4 +1,6 @@
-# Simple_Macroquad_Slider :bar_chart:
+# Simple_Macroquad_Slider :bar_chart:  
+![Visitas](https://komarev.com/ghpvc/?username=HectorCRM-simple-macroquad-slider&color=blue&style=round&label=Visitas:)  
+
 ![Ejemplo](./img/slider.gif)  
 
 ## ¿Cual es la utilidad de este proyecto? ⁉️
