@@ -1,4 +1,4 @@
-# Simple_Macroquad_Slider
+# Simple_Macroquad_Slider :bar_chart:
 ![Ejemplo](./img/slider.gif)  
 
 ## ¿Cual es la utilidad de este proyecto? ⁉️
@@ -30,8 +30,20 @@ let mut volumen: f32 = 0.5; //A mitad, por ejemplo
 
 Despues construimos el slider:
 ```
-let mut slider_volumen: Slider = Slider::nuevo_slider(nombre_etiqueta, posicion_y, ancho_barra, alto, valor(volumen en este caso), color_barra, color_slider);
+let mut slider_volumen: Slider = Slider::nuevo_slider(nombre_etiqueta, metrica, posicion_y, ancho_barra, alto, valor, valor_minimo, valor_maximo, color_barra, color_slider);
 ```
+Explicación de los parametros:  
+ - **nombre_etiqueta:** El nombre que se mostrará sobre el slider en pantalla, en el ejemplo "Volumen"
+ - **metrica:** Hace referencia al tipo de dato con el que estamos trabajando, **%** en el ejemplo. Puede dejarse vacia("") si no queremos mostrar nada.
+ - **posicion_y:** Posición del slider en el eje vertical de la pantalla.
+ - **ancho_barra:** Anchura que ocupará el slider en pantalla.
+ - **alto:** Altura en px que tendrán en pantalla la barra del slider y el propio slider.
+ - **valor:** El valor o variable que queremos modificar con el slider.
+ - **valor_minimo:** Valor minimo deseado para la variable con la que vamos a trabajar, es importante establecerlo para poder mapear el valor a pixeles al renderizar el slider.
+ - **valor_maximo:** Idem, pero para el limirte superior del valor de la variable.
+ - **color_barra:** Color deseado para la barra del slider.
+ - **color_slider:** Color deseado para el slider y la etiqueta sobre este.  
+ 
 Y ya podemos usarlo:
 ```
 slider_volumen.pintar_slider(volumen);
@@ -45,7 +57,7 @@ volumen = slider_volumen.mover_slider(volumen);
 
 ## Mejoras futuras :rocket:
  - Crear sliders verticales.  
- - Habilitar diferentes valores(int, float...) y diferentes metricas a los sliders.  
+ - Habilitar valors personalizados y diferentes metricas a los sliders.:heavy_check_mark:  
 <!--
 ## Versiones :pushpin:
  [Ver CHANGELOG](./CHANGELOG.md) -->
