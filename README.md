@@ -57,7 +57,7 @@ volumen = slider_volumen.mover_slider(volumen);
 
 ## Mejoras futuras :rocket:
  - Crear sliders verticales.  
- - Habilitar valors personalizados y diferentes metricas a los sliders.:heavy_check_mark:  
+ - Habilitar valors personalizados y diferentes metricas a los sliders. ✔️  
 <!--
 ## Versiones :pushpin:
  [Ver CHANGELOG](./CHANGELOG.md) -->
