@@ -1,12 +1,12 @@
 use macroquad::prelude::*;
 /*
 Autor: Héctor Monroy Fuertes
-Version: 1.0
+Version: 1.1
 Descripción: Pequeño proyecto para generar sliders que permitan la modificacion de variables de forma sencilla
 */
 
-/// Struct para crear un slider interactivo que permita controlar variables en macroquad
-pub struct Slider {
+/// Struct con todos los datos del slider
+struct Slider {
     pos_x_barra: f32,
     pos_y_barra: f32,
     ancho_barra: f32,
@@ -17,11 +17,14 @@ pub struct Slider {
     color_slider: Color,
     arrastrando: bool,
     nombre : String,
+    metrica: String,
+    min_valor: f32,
+    max_valor: f32,
 }
 
 impl Slider {
-    /// Metodo constructor del slider
-    pub fn nuevo_slider(nombre: &str, pos_y: f32, ancho: f32, alto: f32, valor: f32, color_barra: Color, color_slider: Color) -> Self {
+
+    pub fn nuevo_slider(nombre: &str, metrica: &str, pos_y: f32, ancho: f32, alto: f32, valor: f32, min_valor: f32, max_valor: f32, color_barra: Color, color_slider: Color) -> Self {
         let x: f32 = (screen_width() / 2.0) - (ancho / 2.0);
         
         Self{
@@ -35,8 +38,12 @@ impl Slider {
             color_slider: color_slider,
             arrastrando: false,
             nombre: nombre.to_string(),
+            metrica: metrica.to_string(),
+            min_valor: min_valor,
+            max_valor: max_valor,
         }
     }
+
     /// Método para poder obtener las coordenadas del mouse de forma sencilla
     pub fn posicion_mouse() -> (f32, f32) {
         let (raton_x, raton_y) = mouse_position();
@@ -44,15 +51,19 @@ impl Slider {
         (raton_x, raton_y)
     }
 
-    /// Metodo para ajustar la posicion del slider en el eje X dependiendo del valor de la variable
-    pub fn posicionar_slider(&self, valor: f32) -> f32 {
-        let ancho_util_barra: f32 = self.ancho_barra - self.ancho_slider;
-        let x_slider = self.pos_x_barra + (valor * ancho_util_barra);
-        
-        x_slider
+    /// Método para mapear el valor recibido a los px de la barra del slider
+    fn map_valor(valor: f32, in_min: f32, in_max: f32, out_min: f32, out_max: f32) -> f32 {
+        (valor - in_min) * (out_max - out_min) / (in_max - in_min) + out_min
     }
 
-    /// Metodo para poder desplazar el slider por la barra y poder modificar el valor de la variable recibida como parametro
+    /// Posicionamos el slider en la barra mapeando su valor entre los valores min y max y el inicio en x de la barra y el final de la misma
+    fn posicionar_slider(&self, valor: f32) -> f32 {
+        let ancho_util_barra: f32 = self.pos_x_barra + self.ancho_barra - self.ancho_slider;
+
+        Slider::map_valor(valor, self.min_valor, self.max_valor, self.pos_x_barra, ancho_util_barra)
+    }
+
+    /// Método para modificar el valor de la variable con la que estamos trabajando
     pub fn mover_slider(&mut self, valor: f32) -> f32 {
     let (x_mouse, y_mouse) = Slider::posicion_mouse();
     
@@ -72,12 +83,13 @@ impl Slider {
     }
     
 
-    // Si ya estamos arrastrando el cursor
+    // Si ya estamos arrastrando el cursor, modificamos el valor 
     if self.arrastrando {
-        let ancho_util_barra = self.ancho_barra - self.ancho_slider;
-        let click_relativo_x = x_mouse - self.pos_x_barra - (self.ancho_slider / 2.0);
-        let nuevo = click_relativo_x / ancho_util_barra;
-        let nuevo_clamped = nuevo.clamp(0.0, 1.0);
+        let ancho_util_barra = self.pos_x_barra + self.ancho_barra - self.ancho_slider;
+        let click_relativo_x = x_mouse - (self.ancho_slider / 2.0);
+        let nuevo_valor: f32 = Slider::map_valor(click_relativo_x, self.pos_x_barra, ancho_util_barra, self.min_valor, self.max_valor);
+        //Limitamos el valor a los valores definidos por el usuario al crear el slider
+        let nuevo_clamped = nuevo_valor.clamp(self.min_valor, self.max_valor);
         
         // Actualizar la nueva posición del slider
         self.pos_x_slider = self.posicionar_slider(nuevo_clamped);
@@ -88,11 +100,11 @@ impl Slider {
     }
 
 
-    /// Metodo para pintar el slider completo en pantalla(barra, slider y etiqueta)
+    /// Método para pintarlo todo en pantalla: etiqueta, valor, metrica, barra y slider
     pub fn pintar_slider(&self, valor: f32) {
         let x_slider = self.posicionar_slider(valor);
 
-        let texto_eqtiqueta = format!("{}: {:.0}%", self.nombre, valor * 100.0);
+        let texto_eqtiqueta = format!("{}: {:.0}{}", self.nombre, valor, self.metrica);
         let pos_y_eqtiqueta = self.pos_y_barra - 10.0;
         let pos_x_etiqueta = self.ancho_barra / 2.0;
         //Etiqueta
