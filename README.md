@@ -22,7 +22,7 @@ Slider = { path = "/ruta del crate en tu máquina" }
 
 Luego incluyelo en el proyecto:
 ```
-use Slider::Slider;
+use slider::Slider;
 ```
 
 Hecho esto, debes contar con una variable de tipo mut sobre la cual trabajara el slider. En el gif de ejemplo trabaja con volumen:
@@ -54,12 +54,11 @@ volumen = slider_volumen.mover_slider(volumen);
 
 ## Requisitos :clipboard:
  - Git
- - Linux
  - Rustc
 
 ## Mejoras futuras :rocket:
  - Crear sliders verticales.  
- - Habilitar valors personalizados y diferentes metricas a los sliders. ✔️  
+ - Habilitar valores personalizados y diferentes métricas a los sliders. ✔️  
 <!--
 ## Versiones :pushpin:
  [Ver CHANGELOG](./CHANGELOG.md) -->

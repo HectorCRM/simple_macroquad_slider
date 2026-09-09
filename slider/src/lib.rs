@@ -1,12 +1,44 @@
+//! # Simple Macroquad Slider
+//! 
+//! Una crate sencilla de utilizar para generar sliders personalizados bajo Macroquad
+//! 
+//! ## ¿Por qué esta crate?
+//! Esta crate está siendo desarrollada debido a que el slider nativo que ofrece Macroquad es funcional, 
+//! pero no es fácilmente personalizable ni bonito. Esta crate viene a tratar de solventar eso, haciendo que crear
+//! un slider visualmente atractivo sea sencillo.
+//! 
+//! ## Caracteristicas
+//! - **Rango dinamico:** Admite valores lógicos(en f32) personalizados (Ej: 0.0 a 1.0, 0.0 a 255.0).
+//! - **Métricas personalizadas:** Permite añadir un sufijo al valor mostrado por el slider (Ej: "%", "px", ""... ).
+//! 
+//! ### Ejemplo básico
+//! ```rust
+//! use slider::Slider;
+//! use macroquad::prelude::*;
+//! 
+//! #[macroquad::main("Ejemplo")]
+//! async fn main() {
+//!     // 1. Inicializamos una variable mutable y el componente con el rango deseado
+//!     let mut volumen = 50.0;
+//!     let mut slider_volumen = Slider::nuevo_slider("Volumen", "%", 100.0, 400.0, 20.0, volumen, 0.0, 100.0, WHITE, RED);
+//!
+//!     loop {
+//!         clear_background(GRAY);
+//!
+//!         // 2. Renderizamos y actualizamos el estado con el ratón
+//!         slider_volumen.pintar_slider(volumen);
+//!         volumen = slider_volumen.mover_slider(volumen);
+//!
+//!         next_frame().await;
+//!     }
+//! }
+//! ```
+//! 
+
 use macroquad::prelude::*;
-/*
-Autor: Héctor Monroy Fuertes
-Version: 1.1
-Descripción: Pequeño proyecto para generar sliders que permitan la modificacion de variables de forma sencilla
-*/
 
 /// Struct con todos los datos del slider
-struct Slider {
+pub struct Slider {
     pos_x_barra: f32,
     pos_y_barra: f32,
     ancho_barra: f32,
